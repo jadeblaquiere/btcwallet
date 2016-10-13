@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 
 	"github.com/jadeblaquiere/ctcd/btcjson"
+	"github.com/jadeblaquiere/ctcd/chaincfg/chainhash"
 	"github.com/jadeblaquiere/ctcd/txscript"
 	"github.com/jadeblaquiere/ctcd/wire"
 	"github.com/jadeblaquiere/ctcrpcclient"
@@ -19,8 +20,8 @@ import (
 	"github.com/jadeblaquiere/ctcwallet/netparams"
 	"github.com/jadeblaquiere/ctcwallet/wallet/txauthor"
 	"github.com/jadeblaquiere/ctcwallet/wallet/txrules"
-	"github.com/btcsuite/go-flags"
 	"github.com/btcsuite/golangcrypto/ssh/terminal"
+	"github.com/jessevdk/go-flags"
 )
 
 var (
@@ -333,7 +334,7 @@ func saneOutputValue(amount btcutil.Amount) bool {
 }
 
 func parseOutPoint(input *btcjson.ListUnspentResult) (wire.OutPoint, error) {
-	txHash, err := wire.NewShaHashFromStr(input.TxID)
+	txHash, err := chainhash.NewHashFromStr(input.TxID)
 	if err != nil {
 		return wire.OutPoint{}, err
 	}

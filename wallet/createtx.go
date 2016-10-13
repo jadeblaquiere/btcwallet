@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/jadeblaquiere/ctcd/blockchain"
 	"github.com/jadeblaquiere/ctcd/btcec"
 	"github.com/jadeblaquiere/ctcd/txscript"
 	"github.com/jadeblaquiere/ctcd/wire"
@@ -188,7 +187,7 @@ func (w *Wallet) findEligibleOutputs(account uint32, minconf int32, bs *waddrmgr
 			continue
 		}
 		if output.FromCoinBase {
-			const target = blockchain.CoinbaseMaturity
+			target := int32(w.chainParams.CoinbaseMaturity)
 			if !confirmed(target, output.Height, bs.Height) {
 				continue
 			}

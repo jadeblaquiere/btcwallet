@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The btcsuite developers
+ * Copyright (c) 2014-2016 The btcsuite developers
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -28,6 +28,7 @@ import (
 	"time"
 
 	"github.com/jadeblaquiere/ctcd/chaincfg"
+	"github.com/jadeblaquiere/ctcd/chaincfg/chainhash"
 	"github.com/jadeblaquiere/ctcd/txscript"
 	"github.com/jadeblaquiere/ctcd/wire"
 	"github.com/jadeblaquiere/ctcutil"
@@ -73,7 +74,7 @@ func createMsgTx(pkScript []byte, amts []int64) *wire.MsgTx {
 		TxIn: []*wire.TxIn{
 			{
 				PreviousOutPoint: wire.OutPoint{
-					Hash:  wire.ShaHash{},
+					Hash:  chainhash.Hash{},
 					Index: 0xffffffff,
 				},
 				SignatureScript: []byte{txscript.OP_NOP},
@@ -153,7 +154,7 @@ func TstCreateTxStore(t *testing.T) (store *wtxmgr.Store, tearDown func()) {
 	if err != nil {
 		t.Fatalf("Failed to create txstore: %v", err)
 	}
-	s, err := wtxmgr.Open(wtxmgrNamespace)
+	s, err := wtxmgr.Open(wtxmgrNamespace, &chaincfg.MainNetParams)
 	if err != nil {
 		t.Fatalf("Failed to open txstore: %v", err)
 	}
@@ -255,12 +256,12 @@ func TstCreateSeriesCredits(t *testing.T, pool *Pool, seriesID uint32, amounts [
 		t.Fatal(err)
 	}
 	msgTx := createMsgTx(pkScript, amounts)
-	txSha := msgTx.TxSha()
+	txHash := msgTx.TxHash()
 	credits := make([]credit, len(amounts))
 	for i := range msgTx.TxOut {
 		c := wtxmgr.Credit{
 			OutPoint: wire.OutPoint{
-				Hash:  txSha,
+				Hash:  txHash,
 				Index: uint32(i),
 			},
 			BlockMeta: wtxmgr.BlockMeta{
