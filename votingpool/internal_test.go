@@ -5,10 +5,10 @@
 package votingpool
 
 import (
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcutil/hdkeychain"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil/hdkeychain"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
 )
 
 var TstLastErr = lastErr

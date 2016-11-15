@@ -14,20 +14,20 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/internal/cfgutil"
-	"github.com/jadeblaquiere/ctcwallet/internal/legacy/keystore"
-	"github.com/jadeblaquiere/ctcwallet/netparams"
-	"github.com/jadeblaquiere/ctcwallet/wallet"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/internal/cfgutil"
+	"github.com/jadeblaquiere/cttwallet/internal/legacy/keystore"
+	"github.com/jadeblaquiere/cttwallet/netparams"
+	"github.com/jadeblaquiere/cttwallet/wallet"
 	flags "github.com/jessevdk/go-flags"
 )
 
 const (
-	defaultCAFilename       = "ctcd.cert"
-	defaultConfigFilename   = "ctcwallet.conf"
+	defaultCAFilename       = "cttd.cert"
+	defaultConfigFilename   = "cttwallet.conf"
 	defaultLogLevel         = "info"
 	defaultLogDirname       = "logs"
-	defaultLogFilename      = "btcwallet.log"
+	defaultLogFilename      = "cttwallet.log"
 	defaultRPCMaxClients    = 10
 	defaultRPCMaxWebsockets = 25
 
@@ -35,8 +35,8 @@ const (
 )
 
 var (
-	btcdDefaultCAFile  = filepath.Join(btcutil.AppDataDir("ctcd", false), "rpc.cert")
-	defaultAppDataDir  = btcutil.AppDataDir("ctcwallet", false)
+	btcdDefaultCAFile  = filepath.Join(cttutil.AppDataDir("cttd", false), "rpc.cert")
+	defaultAppDataDir  = cttutil.AppDataDir("cttwallet", false)
 	defaultConfigFile  = filepath.Join(defaultAppDataDir, defaultConfigFilename)
 	defaultRPCKeyFile  = filepath.Join(defaultAppDataDir, "rpc.key")
 	defaultRPCCertFile = filepath.Join(defaultAppDataDir, "rpc.cert")
@@ -240,7 +240,7 @@ func parseAndSetDebugLevels(debugLevel string) error {
 //      3) Load configuration file overwriting defaults with any specified options
 //      4) Parse CLI options and overwrite/add any specified options
 //
-// The above results in btcwallet functioning properly without any config
+// The above results in cttwallet functioning properly without any config
 // settings while still allowing the user to override settings with config files
 // and command line options.  Command line options always take precedence.
 func loadConfig() (*config, []string, error) {

@@ -11,10 +11,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/jadeblaquiere/ctcd/chaincfg"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
-	_ "github.com/jadeblaquiere/ctcwallet/walletdb/bdb"
+	"github.com/jadeblaquiere/cttd/chaincfg"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
+	_ "github.com/jadeblaquiere/cttwallet/walletdb/bdb"
 )
 
 var (

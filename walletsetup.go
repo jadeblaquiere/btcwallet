@@ -10,16 +10,16 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jadeblaquiere/ctcd/btcec"
-	"github.com/jadeblaquiere/ctcd/chaincfg"
-	//"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/internal/legacy/keystore"
-	"github.com/jadeblaquiere/ctcwallet/internal/prompt"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
-	"github.com/jadeblaquiere/ctcwallet/wallet"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
-	_ "github.com/jadeblaquiere/ctcwallet/walletdb/bdb"
+	"github.com/jadeblaquiere/cttd/btcec"
+	"github.com/jadeblaquiere/cttd/chaincfg"
+	//"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/internal/legacy/keystore"
+	"github.com/jadeblaquiere/cttwallet/internal/prompt"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/wallet"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
+	_ "github.com/jadeblaquiere/cttwallet/walletdb/bdb"
 )
 
 // networkDir returns the directory name of a network directory to hold wallet
@@ -59,7 +59,7 @@ func convertLegacyKeystore(legacyKeyStore *keystore.Store, manager *waddrmgr.Man
 				continue
 			}
 
-			wif, err := btcutil.NewWIF((*btcec.PrivateKey)(privKey),
+			wif, err := cttutil.NewWIF((*btcec.PrivateKey)(privKey),
 				netParams, addr.Compressed())
 			if err != nil {
 				fmt.Printf("WARN: Failed to create wallet "+

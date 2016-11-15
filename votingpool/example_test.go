@@ -23,14 +23,14 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jadeblaquiere/ctcd/chaincfg"
-	"github.com/jadeblaquiere/ctcd/txscript"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/votingpool"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
-	_ "github.com/jadeblaquiere/ctcwallet/walletdb/bdb"
-	"github.com/jadeblaquiere/ctcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttd/chaincfg"
+	"github.com/jadeblaquiere/cttd/txscript"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/votingpool"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
+	_ "github.com/jadeblaquiere/cttwallet/walletdb/bdb"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 )
 
 var (
@@ -200,7 +200,7 @@ func Example_startWithdrawal() {
 	}
 	defer mgr.Lock()
 
-	addr, _ := btcutil.DecodeAddress("1MirQ9bwyQcGVJPwKUgapu5ouK2E2Ey4gX", mgr.ChainParams())
+	addr, _ := cttutil.DecodeAddress("1MirQ9bwyQcGVJPwKUgapu5ouK2E2Ey4gX", mgr.ChainParams())
 	pkScript, _ := txscript.PayToAddrScript(addr)
 	requests := []votingpool.OutputRequest{
 		votingpool.OutputRequest{
@@ -228,7 +228,7 @@ func Example_startWithdrawal() {
 		return
 	}
 	lastSeriesID := seriesID
-	dustThreshold := btcutil.Amount(1e4)
+	dustThreshold := cttutil.Amount(1e4)
 	currentBlock := int32(19432)
 	roundID := uint32(0)
 	txstore, tearDownFunc, err := exampleCreateTxStore()

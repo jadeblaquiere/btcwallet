@@ -5,9 +5,9 @@
 package txsizes
 
 import (
-	"github.com/jadeblaquiere/ctcd/wire"
+	"github.com/jadeblaquiere/cttd/wire"
 
-	h "github.com/jadeblaquiere/ctcwallet/internal/helpers"
+	h "github.com/jadeblaquiere/cttwallet/internal/helpers"
 )
 
 // Worst case script and input/output size estimates.

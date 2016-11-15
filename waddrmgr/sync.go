@@ -7,8 +7,8 @@ package waddrmgr
 import (
 	"sync"
 
-	"github.com/jadeblaquiere/ctcd/chaincfg/chainhash"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
+	"github.com/jadeblaquiere/cttd/chaincfg/chainhash"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
 )
 
 const (

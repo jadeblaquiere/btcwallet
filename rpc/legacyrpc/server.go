@@ -18,9 +18,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/jadeblaquiere/ctcd/btcjson"
-	"github.com/jadeblaquiere/ctcwallet/chain"
-	"github.com/jadeblaquiere/ctcwallet/wallet"
+	"github.com/jadeblaquiere/cttd/btcjson"
+	"github.com/jadeblaquiere/cttwallet/chain"
+	"github.com/jadeblaquiere/cttwallet/wallet"
 	"github.com/btcsuite/fastsha256"
 	"github.com/btcsuite/websocket"
 )

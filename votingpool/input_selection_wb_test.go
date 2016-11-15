@@ -10,15 +10,15 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/jadeblaquiere/ctcd/chaincfg/chainhash"
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttd/chaincfg/chainhash"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 )
 
 var (
 	// random small number of satoshis used as dustThreshold
-	dustThreshold btcutil.Amount = 1e4
+	dustThreshold cttutil.Amount = 1e4
 )
 
 func TestGetEligibleInputs(t *testing.T) {

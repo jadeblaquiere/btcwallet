@@ -8,13 +8,13 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/jadeblaquiere/ctcd/btcec"
-	"github.com/jadeblaquiere/ctcd/txscript"
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
-	"github.com/jadeblaquiere/ctcwallet/wallet/txauthor"
-	"github.com/jadeblaquiere/ctcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttd/btcec"
+	"github.com/jadeblaquiere/cttd/txscript"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/wallet/txauthor"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 )
 
 // byAmount defines the methods needed to satisify sort.Interface to
@@ -32,11 +32,11 @@ func makeInputSource(eligible []wtxmgr.Credit) txauthor.InputSource {
 
 	// Current inputs and their total value.  These are closed over by the
 	// returned input source and reused across multiple calls.
-	currentTotal := btcutil.Amount(0)
+	currentTotal := cttutil.Amount(0)
 	currentInputs := make([]*wire.TxIn, 0, len(eligible))
 	currentScripts := make([][]byte, 0, len(eligible))
 
-	return func(target btcutil.Amount) (btcutil.Amount, []*wire.TxIn, [][]byte, error) {
+	return func(target cttutil.Amount) (cttutil.Amount, []*wire.TxIn, [][]byte, error) {
 		for currentTotal < target && len(eligible) != 0 {
 			nextCredit := &eligible[0]
 			eligible = eligible[1:]
@@ -55,7 +55,7 @@ type secretSource struct {
 	*waddrmgr.Manager
 }
 
-func (s secretSource) GetKey(addr btcutil.Address) (*btcec.PrivateKey, bool, error) {
+func (s secretSource) GetKey(addr cttutil.Address) (*btcec.PrivateKey, bool, error) {
 	ma, err := s.Address(addr)
 	if err != nil {
 		return nil, false, err
@@ -73,7 +73,7 @@ func (s secretSource) GetKey(addr btcutil.Address) (*btcec.PrivateKey, bool, err
 	return privKey, ma.Compressed(), nil
 }
 
-func (s secretSource) GetScript(addr btcutil.Address) ([]byte, error) {
+func (s secretSource) GetScript(addr cttutil.Address) ([]byte, error) {
 	ma, err := s.Address(addr)
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (w *Wallet) txToOutputs(outputs []*wire.TxOut, account uint32, minconf int3
 	changeSource := func() ([]byte, error) {
 		// Derive the change output script.  As a hack to allow spending from
 		// the imported account, change addresses are created from account 0.
-		var changeAddr btcutil.Address
+		var changeAddr cttutil.Address
 		if account == waddrmgr.ImportedAddrAccount {
 			changeAddr, err = w.NewChangeAddress(0)
 		} else {
@@ -157,7 +157,7 @@ func (w *Wallet) txToOutputs(outputs []*wire.TxOut, account uint32, minconf int3
 	}
 
 	if tx.ChangeIndex >= 0 && account == waddrmgr.ImportedAddrAccount {
-		changeAmount := btcutil.Amount(tx.Tx.TxOut[tx.ChangeIndex].Value)
+		changeAmount := cttutil.Amount(tx.Tx.TxOut[tx.ChangeIndex].Value)
 		log.Warnf("Spend from imported account produced change: moving"+
 			" %v from imported account into default account.", changeAmount)
 	}

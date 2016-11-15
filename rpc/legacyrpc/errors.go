@@ -7,7 +7,7 @@ package legacyrpc
 import (
 	"errors"
 
-	"github.com/jadeblaquiere/ctcd/btcjson"
+	"github.com/jadeblaquiere/cttd/btcjson"
 )
 
 // TODO(jrick): There are several error paths which 'replace' various errors

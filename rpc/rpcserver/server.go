@@ -25,20 +25,20 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 
-	"github.com/jadeblaquiere/ctcd/chaincfg/chainhash"
-	"github.com/jadeblaquiere/ctcd/txscript"
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcrpcclient"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcutil/hdkeychain"
-	"github.com/jadeblaquiere/ctcwallet/chain"
-	"github.com/jadeblaquiere/ctcwallet/internal/cfgutil"
-	"github.com/jadeblaquiere/ctcwallet/internal/zero"
-	"github.com/jadeblaquiere/ctcwallet/netparams"
-	pb "github.com/jadeblaquiere/ctcwallet/rpc/walletrpc"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
-	"github.com/jadeblaquiere/ctcwallet/wallet"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
+	"github.com/jadeblaquiere/cttd/chaincfg/chainhash"
+	"github.com/jadeblaquiere/cttd/txscript"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttrpcclient"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttutil/hdkeychain"
+	"github.com/jadeblaquiere/cttwallet/chain"
+	"github.com/jadeblaquiere/cttwallet/internal/cfgutil"
+	"github.com/jadeblaquiere/cttwallet/internal/zero"
+	"github.com/jadeblaquiere/cttwallet/netparams"
+	pb "github.com/jadeblaquiere/cttwallet/rpc/walletrpc"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/wallet"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
 )
 
 // Public API version constants
@@ -226,7 +226,7 @@ func (s *walletServer) NextAddress(ctx context.Context, req *pb.NextAddressReque
 	*pb.NextAddressResponse, error) {
 
 	var (
-		addr btcutil.Address
+		addr cttutil.Address
 		err  error
 	)
 	switch req.Kind {
@@ -249,7 +249,7 @@ func (s *walletServer) ImportPrivateKey(ctx context.Context, req *pb.ImportPriva
 
 	defer zero.Bytes(req.Passphrase)
 
-	wif, err := btcutil.DecodeWIF(req.PrivateKeyWif)
+	wif, err := cttutil.DecodeWIF(req.PrivateKeyWif)
 	if err != nil {
 		return nil, grpc.Errorf(codes.InvalidArgument,
 			"Invalid WIF-encoded private key: %v", err)
@@ -333,7 +333,7 @@ func (s *walletServer) FundTransaction(ctx context.Context, req *pb.FundTransact
 	}
 
 	selectedOutputs := make([]*pb.FundTransactionResponse_PreviousOutput, 0, len(outputs))
-	var totalAmount btcutil.Amount
+	var totalAmount cttutil.Amount
 	for i := range outputs {
 		output := &outputs[i]
 
@@ -372,14 +372,14 @@ func (s *walletServer) FundTransaction(ctx context.Context, req *pb.FundTransact
 		})
 		totalAmount += output.Amount
 
-		if req.TargetAmount != 0 && totalAmount > btcutil.Amount(req.TargetAmount) {
+		if req.TargetAmount != 0 && totalAmount > cttutil.Amount(req.TargetAmount) {
 			break
 		}
 
 	}
 
 	var changeScript []byte
-	if req.IncludeChangeScript && totalAmount > btcutil.Amount(req.TargetAmount) {
+	if req.IncludeChangeScript && totalAmount > cttutil.Amount(req.TargetAmount) {
 		changeAddr, err := s.wallet.NewChangeAddress(req.Account)
 		if err != nil {
 			return nil, translateError(err)
@@ -842,7 +842,7 @@ func (s *loaderServer) StartConsensusRpc(ctx context.Context, req *pb.StartConse
 
 	err = rpcClient.Start()
 	if err != nil {
-		if err == btcrpcclient.ErrInvalidAuth {
+		if err == cttrpcclient.ErrInvalidAuth {
 			return nil, grpc.Errorf(codes.InvalidArgument,
 				"Invalid RPC credentials: %v", err)
 		}

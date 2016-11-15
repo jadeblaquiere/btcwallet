@@ -10,11 +10,11 @@ import (
 	"encoding/gob"
 	"fmt"
 
-	"github.com/jadeblaquiere/ctcd/txscript"
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/snacl"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
+	"github.com/jadeblaquiere/cttd/txscript"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/snacl"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
 )
 
 // These constants define the serialized length for a given encrypted extended
@@ -55,7 +55,7 @@ type dbWithdrawalRow struct {
 	StartAddress  dbWithdrawalAddress
 	ChangeStart   dbChangeAddress
 	LastSeriesID  uint32
-	DustThreshold btcutil.Amount
+	DustThreshold cttutil.Amount
 	Status        dbWithdrawalStatus
 }
 
@@ -72,7 +72,7 @@ type dbChangeAddress struct {
 
 type dbOutputRequest struct {
 	Addr        string
-	Amount      btcutil.Amount
+	Amount      cttutil.Amount
 	Server      string
 	Transaction uint32
 }
@@ -88,7 +88,7 @@ type dbWithdrawalOutput struct {
 type dbOutBailmentOutpoint struct {
 	Ntxid  Ntxid
 	Index  uint32
-	Amount btcutil.Amount
+	Amount cttutil.Amount
 }
 
 type dbChangeAwareTx struct {
@@ -99,7 +99,7 @@ type dbChangeAwareTx struct {
 type dbWithdrawalStatus struct {
 	NextInputAddr  dbWithdrawalAddress
 	NextChangeAddr dbChangeAddress
-	Fees           btcutil.Amount
+	Fees           cttutil.Amount
 	Outputs        map[OutBailmentID]dbWithdrawalOutput
 	Sigs           map[Ntxid]TxSigs
 	Transactions   map[Ntxid]dbChangeAwareTx
@@ -395,7 +395,7 @@ func serializeSeriesRow(row *dbSeriesRow) ([]byte, error) {
 // serializeWithdrawal constructs a dbWithdrawalRow and serializes it (using
 // encoding/gob) so that it can be stored in the DB.
 func serializeWithdrawal(requests []OutputRequest, startAddress WithdrawalAddress,
-	lastSeriesID uint32, changeStart ChangeAddress, dustThreshold btcutil.Amount,
+	lastSeriesID uint32, changeStart ChangeAddress, dustThreshold cttutil.Amount,
 	status WithdrawalStatus) ([]byte, error) {
 
 	dbStartAddr := dbWithdrawalAddress{
@@ -489,7 +489,7 @@ func deserializeWithdrawal(p *Pool, serialized []byte) (*withdrawalInfo, error) 
 	// WithdrawalStatus.Outputs later on.
 	requestsByOID := make(map[OutBailmentID]OutputRequest)
 	for i, req := range row.Requests {
-		addr, err := btcutil.DecodeAddress(req.Addr, chainParams)
+		addr, err := cttutil.DecodeAddress(req.Addr, chainParams)
 		if err != nil {
 			return nil, newError(ErrWithdrawalStorage,
 				"cannot deserialize addr for requested output", err)

@@ -7,16 +7,16 @@ package wtxmgr
 import (
 	"fmt"
 
-	"github.com/jadeblaquiere/ctcd/chaincfg/chainhash"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
+	"github.com/jadeblaquiere/cttd/chaincfg/chainhash"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
 )
 
 // CreditRecord contains metadata regarding a transaction credit for a known
 // transaction.  Further details may be looked up by indexing a wire.MsgTx.TxOut
 // with the Index field.
 type CreditRecord struct {
-	Amount btcutil.Amount
+	Amount cttutil.Amount
 	Index  uint32
 	Spent  bool
 	Change bool
@@ -26,7 +26,7 @@ type CreditRecord struct {
 // transaction.  Further details may be looked up by indexing a wire.MsgTx.TxIn
 // with the Index field.
 type DebitRecord struct {
-	Amount btcutil.Amount
+	Amount cttutil.Amount
 	Index  uint32
 }
 

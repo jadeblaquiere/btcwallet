@@ -7,14 +7,14 @@
 package helpers
 
 import (
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcutil"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil"
 )
 
 // SumOutputValues sums up the list of TxOuts and returns an Amount.
-func SumOutputValues(outputs []*wire.TxOut) (totalOutput btcutil.Amount) {
+func SumOutputValues(outputs []*wire.TxOut) (totalOutput cttutil.Amount) {
 	for _, txOut := range outputs {
-		totalOutput += btcutil.Amount(txOut.Value)
+		totalOutput += cttutil.Amount(txOut.Value)
 	}
 	return totalOutput
 }

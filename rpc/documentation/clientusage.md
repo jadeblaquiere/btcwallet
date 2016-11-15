@@ -52,15 +52,15 @@ import (
 	"fmt"
 	"path/filepath"
 
-	pb "github.com/jadeblaquiere/ctcwallet/rpc/walletrpc"
+	pb "github.com/jadeblaquiere/cttwallet/rpc/walletrpc"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
-	"github.com/jadeblaquiere/ctcutil"
+	"github.com/jadeblaquiere/cttutil"
 )
 
-var certificateFile = filepath.Join(btcutil.AppDataDir("btcwallet", false), "rpc.cert")
+var certificateFile = filepath.Join(cttutil.AppDataDir("btcwallet", false), "rpc.cert")
 
 func main() {
 	creds, err := credentials.NewClientTLSFromFile(certificateFile, "localhost")
@@ -86,7 +86,7 @@ func main() {
 		return
 	}
 
-	fmt.Println("Spendable balance: ", btcutil.Amount(balanceResponse.Spendable))
+	fmt.Println("Spendable balance: ", cttutil.Amount(balanceResponse.Spendable))
 }
 ```
 

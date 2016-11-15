@@ -17,22 +17,22 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jadeblaquiere/ctcd/blockchain"
-	"github.com/jadeblaquiere/ctcd/btcec"
-	"github.com/jadeblaquiere/ctcd/btcjson"
-	"github.com/jadeblaquiere/ctcd/chaincfg"
-	"github.com/jadeblaquiere/ctcd/chaincfg/chainhash"
-	"github.com/jadeblaquiere/ctcd/txscript"
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcrpcclient"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcutil/hdkeychain"
-	"github.com/jadeblaquiere/ctcwallet/chain"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
-	"github.com/jadeblaquiere/ctcwallet/wallet/txauthor"
-	"github.com/jadeblaquiere/ctcwallet/wallet/txrules"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
-	"github.com/jadeblaquiere/ctcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttd/blockchain"
+	"github.com/jadeblaquiere/cttd/btcec"
+	"github.com/jadeblaquiere/cttd/btcjson"
+	"github.com/jadeblaquiere/cttd/chaincfg"
+	"github.com/jadeblaquiere/cttd/chaincfg/chainhash"
+	"github.com/jadeblaquiere/cttd/txscript"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttrpcclient"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttutil/hdkeychain"
+	"github.com/jadeblaquiere/cttwallet/chain"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/wallet/txauthor"
+	"github.com/jadeblaquiere/cttwallet/wallet/txrules"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 )
 
 const (
@@ -77,7 +77,7 @@ type Wallet struct {
 	chainClientSyncMtx sync.Mutex
 
 	lockedOutpoints map[wire.OutPoint]struct{}
-	relayFee        btcutil.Amount
+	relayFee        cttutil.Amount
 	relayFeeMu      sync.Mutex
 
 	// Channels for rescan processing.  Requests are added and merged with
@@ -197,7 +197,7 @@ func (w *Wallet) ChainClient() *chain.RPCClient {
 
 // RelayFee returns the current minimum relay fee (per kB of serialized
 // transaction) used when constructing transactions.
-func (w *Wallet) RelayFee() btcutil.Amount {
+func (w *Wallet) RelayFee() cttutil.Amount {
 	w.relayFeeMu.Lock()
 	relayFee := w.relayFee
 	w.relayFeeMu.Unlock()
@@ -206,7 +206,7 @@ func (w *Wallet) RelayFee() btcutil.Amount {
 
 // SetRelayFee sets a new minimum relay fee (per kB of serialized
 // transaction) used when constructing transactions.
-func (w *Wallet) SetRelayFee(relayFee btcutil.Amount) {
+func (w *Wallet) SetRelayFee(relayFee cttutil.Amount) {
 	w.relayFeeMu.Lock()
 	w.relayFee = relayFee
 	w.relayFeeMu.Unlock()
@@ -285,7 +285,7 @@ func (w *Wallet) ChainSynced() bool {
 // SetChainSynced marks whether the wallet is connected to and currently in sync
 // with the latest block notified by the chain server.
 //
-// NOTE: Due to an API limitation with btcrpcclient, this may return true after
+// NOTE: Due to an API limitation with cttrpcclient, this may return true after
 // the client disconnected (and is attempting a reconnect).  This will be unknown
 // until the reconnect notification is received, at which point the wallet can be
 // marked out of sync again until after the next rescan completes.
@@ -298,9 +298,9 @@ func (w *Wallet) SetChainSynced(synced bool) {
 // activeData returns the currently-active receiving addresses and all unspent
 // outputs.  This is primarely intended to provide the parameters for a
 // rescan request.
-func (w *Wallet) activeData() ([]btcutil.Address, []wtxmgr.Credit, error) {
-	var addrs []btcutil.Address
-	err := w.Manager.ForEachActiveAddress(func(addr btcutil.Address) error {
+func (w *Wallet) activeData() ([]cttutil.Address, []wtxmgr.Credit, error) {
+	var addrs []cttutil.Address
+	err := w.Manager.ForEachActiveAddress(func(addr cttutil.Address) error {
 		addrs = append(addrs, addr)
 		return nil
 	})
@@ -324,9 +324,9 @@ func (w *Wallet) syncWithChain() error {
 	// Request notifications for connected and disconnected blocks.
 	//
 	// TODO(jrick): Either request this notification only once, or when
-	// btcrpcclient is modified to allow some notification request to not
+	// cttrpcclient is modified to allow some notification request to not
 	// automatically resent on reconnect, include the notifyblocks request
-	// as well.  I am leaning towards allowing off all btcrpcclient
+	// as well.  I am leaning towards allowing off all cttrpcclient
 	// notification re-registrations, in which case the code here should be
 	// left as is.
 	err = chainClient.NotifyBlocks()
@@ -656,7 +656,7 @@ func (w *Wallet) AccountUsed(account uint32) (bool, error) {
 // a UTXO must be in a block.  If confirmations is 1 or greater,
 // the balance will be calculated based on how many how many blocks
 // include a UTXO.
-func (w *Wallet) CalculateBalance(confirms int32) (btcutil.Amount, error) {
+func (w *Wallet) CalculateBalance(confirms int32) (cttutil.Amount, error) {
 	blk := w.Manager.SyncedTo()
 	return w.TxStore.Balance(confirms, blk.Height)
 }
@@ -664,9 +664,9 @@ func (w *Wallet) CalculateBalance(confirms int32) (btcutil.Amount, error) {
 // Balances records total, spendable (by policy), and immature coinbase
 // reward balance amounts.
 type Balances struct {
-	Total          btcutil.Amount
-	Spendable      btcutil.Amount
-	ImmatureReward btcutil.Amount
+	Total          cttutil.Amount
+	Spendable      cttutil.Amount
+	ImmatureReward cttutil.Amount
 }
 
 // CalculateAccountBalances sums the amounts of all unspent transaction
@@ -716,7 +716,7 @@ func (w *Wallet) CalculateAccountBalances(account uint32, confirms int32) (Balan
 // from a wallet.  If the address has already been used (there is at least
 // one transaction spending to it in the blockchain or btcd mempool), the next
 // chained address is returned.
-func (w *Wallet) CurrentAddress(account uint32) (btcutil.Address, error) {
+func (w *Wallet) CurrentAddress(account uint32) (cttutil.Address, error) {
 	addr, err := w.Manager.LastExternalAddress(account)
 	if err != nil {
 		// If no address exists yet, create the first external address
@@ -851,13 +851,13 @@ func ListTransactions(details *wtxmgr.TxDetails, addrMgr *waddrmgr.Manager,
 	// Fee can only be determined if every input is a debit.
 	var feeF64 float64
 	if len(details.Debits) == len(details.MsgTx.TxIn) {
-		var debitTotal btcutil.Amount
+		var debitTotal cttutil.Amount
 		for _, deb := range details.Debits {
 			debitTotal += deb.Amount
 		}
-		var outputTotal btcutil.Amount
+		var outputTotal cttutil.Amount
 		for _, output := range details.MsgTx.TxOut {
-			outputTotal += btcutil.Amount(output.Value)
+			outputTotal += cttutil.Amount(output.Value)
 		}
 		// Note: The actual fee is debitTotal - outputTotal.  However,
 		// this RPC reports negative numbers for fees, so the inverse
@@ -899,7 +899,7 @@ outputs:
 			}
 		}
 
-		amountF64 := btcutil.Amount(output.Value).ToBTC()
+		amountF64 := cttutil.Amount(output.Value).ToBTC()
 		result := btcjson.ListTransactionsResult{
 			// Fields left zeroed:
 			//   InvolvesWatchOnly
@@ -1033,7 +1033,7 @@ func (w *Wallet) ListAddressTransactions(pkHashes map[string]struct{}) (
 				if err != nil || len(addrs) != 1 {
 					continue
 				}
-				apkh, ok := addrs[0].(*btcutil.AddressPubKeyHash)
+				apkh, ok := addrs[0].(*cttutil.AddressPubKeyHash)
 				if !ok {
 					continue
 				}
@@ -1129,7 +1129,7 @@ func (w *Wallet) GetTransactions(startBlock, endBlock *BlockIdentifier, cancel <
 	// TODO: Fetching block heights by their hashes is inherently racy
 	// because not all block headers are saved but when they are for SPV the
 	// db can be queried directly without this.
-	var startResp, endResp btcrpcclient.FutureGetBlockVerboseResult
+	var startResp, endResp cttrpcclient.FutureGetBlockVerboseResult
 	if startBlock != nil {
 		if startBlock.hash == nil {
 			start = startBlock.height
@@ -1203,7 +1203,7 @@ func (w *Wallet) GetTransactions(startBlock, endBlock *BlockIdentifier, cancel <
 // AccountResult is a single account result for the AccountsResult type.
 type AccountResult struct {
 	waddrmgr.AccountProperties
-	TotalBalance btcutil.Amount
+	TotalBalance cttutil.Amount
 }
 
 // AccountsResult is the resutl of the wallet's Accounts method.  See that
@@ -1241,7 +1241,7 @@ func (w *Wallet) Accounts() (*AccountsResult, error) {
 	if err != nil {
 		return nil, err
 	}
-	m := make(map[uint32]*btcutil.Amount)
+	m := make(map[uint32]*cttutil.Amount)
 	for i := range accounts {
 		a := &accounts[i]
 		m[a.AccountNumber] = &a.TotalBalance
@@ -1448,7 +1448,7 @@ func (w *Wallet) DumpPrivKeys() ([]string, error) {
 	var privkeys []string
 	// Iterate over each active address, appending the private key to
 	// privkeys.
-	err := w.Manager.ForEachActiveAddress(func(addr btcutil.Address) error {
+	err := w.Manager.ForEachActiveAddress(func(addr cttutil.Address) error {
 		ma, err := w.Manager.Address(addr)
 		if err != nil {
 			return err
@@ -1475,7 +1475,7 @@ func (w *Wallet) DumpPrivKeys() ([]string, error) {
 
 // DumpWIFPrivateKey returns the WIF encoded private key for a
 // single wallet address.
-func (w *Wallet) DumpWIFPrivateKey(addr btcutil.Address) (string, error) {
+func (w *Wallet) DumpWIFPrivateKey(addr cttutil.Address) (string, error) {
 	// Get private key from wallet if it exists.
 	address, err := w.Manager.Address(addr)
 	if err != nil {
@@ -1496,7 +1496,7 @@ func (w *Wallet) DumpWIFPrivateKey(addr btcutil.Address) (string, error) {
 
 // ImportPrivateKey imports a private key to the wallet and writes the new
 // wallet to disk.
-func (w *Wallet) ImportPrivateKey(wif *btcutil.WIF, bs *waddrmgr.BlockStamp,
+func (w *Wallet) ImportPrivateKey(wif *cttutil.WIF, bs *waddrmgr.BlockStamp,
 	rescan bool) (string, error) {
 
 	// The starting block for the key is the genesis block unless otherwise
@@ -1518,7 +1518,7 @@ func (w *Wallet) ImportPrivateKey(wif *btcutil.WIF, bs *waddrmgr.BlockStamp,
 	// imported address.
 	if rescan {
 		job := &RescanJob{
-			Addrs:      []btcutil.Address{addr.Address()},
+			Addrs:      []cttutil.Address{addr.Address()},
 			OutPoints:  nil,
 			BlockStamp: *bs,
 		}
@@ -1687,7 +1687,7 @@ func (w *Wallet) ResendUnminedTxs() {
 // addresses in a wallet.
 func (w *Wallet) SortedActivePaymentAddresses() ([]string, error) {
 	var addrStrs []string
-	err := w.Manager.ForEachActiveAddress(func(addr btcutil.Address) error {
+	err := w.Manager.ForEachActiveAddress(func(addr cttutil.Address) error {
 		addrStrs = append(addrStrs, addr.EncodeAddress())
 		return nil
 	})
@@ -1700,7 +1700,7 @@ func (w *Wallet) SortedActivePaymentAddresses() ([]string, error) {
 }
 
 // NewAddress returns the next external chained address for a wallet.
-func (w *Wallet) NewAddress(account uint32) (btcutil.Address, error) {
+func (w *Wallet) NewAddress(account uint32) (cttutil.Address, error) {
 	// Get next address from wallet.
 	addrs, err := w.Manager.NextExternalAddresses(account, 1)
 	if err != nil {
@@ -1708,7 +1708,7 @@ func (w *Wallet) NewAddress(account uint32) (btcutil.Address, error) {
 	}
 
 	// Request updates from btcd for new transactions sent to this address.
-	utilAddrs := make([]btcutil.Address, len(addrs))
+	utilAddrs := make([]cttutil.Address, len(addrs))
 	for i, addr := range addrs {
 		utilAddrs[i] = addr.Address()
 	}
@@ -1734,7 +1734,7 @@ func (w *Wallet) NewAddress(account uint32) (btcutil.Address, error) {
 }
 
 // NewChangeAddress returns a new change address for a wallet.
-func (w *Wallet) NewChangeAddress(account uint32) (btcutil.Address, error) {
+func (w *Wallet) NewChangeAddress(account uint32) (cttutil.Address, error) {
 	// Get next chained change address from wallet for account.
 	addrs, err := w.Manager.NextInternalAddresses(account, 1)
 	if err != nil {
@@ -1742,7 +1742,7 @@ func (w *Wallet) NewChangeAddress(account uint32) (btcutil.Address, error) {
 	}
 
 	// Request updates from btcd for new transactions sent to this address.
-	utilAddrs := make([]btcutil.Address, len(addrs))
+	utilAddrs := make([]cttutil.Address, len(addrs))
 	for i, addr := range addrs {
 		utilAddrs[i] = addr.Address()
 	}
@@ -1779,11 +1779,11 @@ func confirms(txHeight, curHeight int32) int32 {
 // TotalReceivedForAccount iterates through a wallet's transaction history,
 // returning the total amount of bitcoins received for a single wallet
 // account.
-func (w *Wallet) TotalReceivedForAccount(account uint32, minConf int32) (btcutil.Amount, int32, error) {
+func (w *Wallet) TotalReceivedForAccount(account uint32, minConf int32) (cttutil.Amount, int32, error) {
 	syncBlock := w.Manager.SyncedTo()
 
 	var (
-		amount     btcutil.Amount
+		amount     cttutil.Amount
 		lastConf   int32 // Confs of the last matching transaction.
 		stopHeight int32
 	)
@@ -1819,12 +1819,12 @@ func (w *Wallet) TotalReceivedForAccount(account uint32, minConf int32) (btcutil
 // TotalReceivedForAddr iterates through a wallet's transaction history,
 // returning the total amount of bitcoins received for a single wallet
 // address.
-func (w *Wallet) TotalReceivedForAddr(addr btcutil.Address, minConf int32) (btcutil.Amount, error) {
+func (w *Wallet) TotalReceivedForAddr(addr cttutil.Address, minConf int32) (cttutil.Amount, error) {
 	syncBlock := w.Manager.SyncedTo()
 
 	var (
 		addrStr    = addr.EncodeAddress()
-		amount     btcutil.Amount
+		amount     cttutil.Amount
 		stopHeight int32
 	)
 
@@ -1927,7 +1927,7 @@ type SignatureError struct {
 // The transaction pointed to by tx is modified by this function.
 func (w *Wallet) SignTransaction(tx *wire.MsgTx, hashType txscript.SigHashType,
 	additionalPrevScripts map[wire.OutPoint][]byte,
-	additionalKeysByAddress map[string]*btcutil.WIF,
+	additionalKeysByAddress map[string]*cttutil.WIF,
 	p2shRedeemScriptsByAddress map[string][]byte) ([]SignatureError, error) {
 
 	var signErrors []SignatureError
@@ -1950,7 +1950,7 @@ func (w *Wallet) SignTransaction(tx *wire.MsgTx, hashType txscript.SigHashType,
 
 		// Set up our callbacks that we pass to txscript so it can
 		// look up the appropriate keys and scripts by address.
-		getKey := txscript.KeyClosure(func(addr btcutil.Address) (
+		getKey := txscript.KeyClosure(func(addr cttutil.Address) (
 			*btcec.PrivateKey, bool, error) {
 			if len(additionalKeysByAddress) != 0 {
 				addrStr := addr.EncodeAddress()
@@ -1980,7 +1980,7 @@ func (w *Wallet) SignTransaction(tx *wire.MsgTx, hashType txscript.SigHashType,
 			return key, pka.Compressed(), nil
 		})
 		getScript := txscript.ScriptClosure(func(
-			addr btcutil.Address) ([]byte, error) {
+			addr cttutil.Address) ([]byte, error) {
 			// If keys were provided then we can only use the
 			// redeem scripts provided with our inputs, too.
 			if len(additionalKeysByAddress) != 0 {

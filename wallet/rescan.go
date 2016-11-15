@@ -5,24 +5,24 @@
 package wallet
 
 import (
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/chain"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
-	"github.com/jadeblaquiere/ctcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/chain"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 )
 
 // RescanProgressMsg reports the current progress made by a rescan for a
 // set of wallet addresses.
 type RescanProgressMsg struct {
-	Addresses    []btcutil.Address
+	Addresses    []cttutil.Address
 	Notification *chain.RescanProgress
 }
 
 // RescanFinishedMsg reports the addresses that were rescanned when a
 // rescanfinished message was received rescanning a batch of addresses.
 type RescanFinishedMsg struct {
-	Addresses    []btcutil.Address
+	Addresses    []cttutil.Address
 	Notification *chain.RescanFinished
 }
 
@@ -33,7 +33,7 @@ type RescanFinishedMsg struct {
 // channel.
 type RescanJob struct {
 	InitialSync bool
-	Addrs       []btcutil.Address
+	Addrs       []cttutil.Address
 	OutPoints   []*wire.OutPoint
 	BlockStamp  waddrmgr.BlockStamp
 	err         chan error
@@ -43,7 +43,7 @@ type RescanJob struct {
 // together before a rescan is performed.
 type rescanBatch struct {
 	initialSync bool
-	addrs       []btcutil.Address
+	addrs       []cttutil.Address
 	outpoints   []*wire.OutPoint
 	bs          waddrmgr.BlockStamp
 	errChans    []chan error
@@ -250,7 +250,7 @@ out:
 // a wallet.  This is intended to be used to sync a wallet back up to the
 // current best block in the main chain, and is considered an initial sync
 // rescan.
-func (w *Wallet) Rescan(addrs []btcutil.Address, unspent []wtxmgr.Credit) error {
+func (w *Wallet) Rescan(addrs []cttutil.Address, unspent []wtxmgr.Credit) error {
 	outpoints := make([]*wire.OutPoint, len(unspent))
 	for i, output := range unspent {
 		outpoints[i] = &output.OutPoint

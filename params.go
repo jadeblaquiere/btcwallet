@@ -4,6 +4,6 @@
 
 package main
 
-import "github.com/jadeblaquiere/ctcwallet/netparams"
+import "github.com/jadeblaquiere/cttwallet/netparams"
 
 var activeNet = &netparams.CTIndigoNetParams

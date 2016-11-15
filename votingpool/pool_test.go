@@ -11,11 +11,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jadeblaquiere/ctcutil/hdkeychain"
-	vp "github.com/jadeblaquiere/ctcwallet/votingpool"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
-	_ "github.com/jadeblaquiere/ctcwallet/walletdb/bdb"
+	"github.com/jadeblaquiere/cttutil/hdkeychain"
+	vp "github.com/jadeblaquiere/cttwallet/votingpool"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
+	_ "github.com/jadeblaquiere/cttwallet/walletdb/bdb"
 )
 
 func TestLoadPoolAndDepositScript(t *testing.T) {

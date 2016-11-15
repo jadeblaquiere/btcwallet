@@ -12,8 +12,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/jadeblaquiere/ctcutil/hdkeychain"
-	"github.com/jadeblaquiere/ctcwallet/internal/legacy/keystore"
+	"github.com/jadeblaquiere/cttutil/hdkeychain"
+	"github.com/jadeblaquiere/cttwallet/internal/legacy/keystore"
 	"github.com/btcsuite/golangcrypto/ssh/terminal"
 )
 

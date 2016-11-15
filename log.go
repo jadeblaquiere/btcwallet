@@ -9,12 +9,12 @@ import (
 	"os"
 
 	"github.com/btcsuite/btclog"
-	"github.com/jadeblaquiere/ctcrpcclient"
-	"github.com/jadeblaquiere/ctcwallet/chain"
-	"github.com/jadeblaquiere/ctcwallet/rpc/legacyrpc"
-	"github.com/jadeblaquiere/ctcwallet/rpc/rpcserver"
-	"github.com/jadeblaquiere/ctcwallet/wallet"
-	"github.com/jadeblaquiere/ctcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttrpcclient"
+	"github.com/jadeblaquiere/cttwallet/chain"
+	"github.com/jadeblaquiere/cttwallet/rpc/legacyrpc"
+	"github.com/jadeblaquiere/cttwallet/rpc/rpcserver"
+	"github.com/jadeblaquiere/cttwallet/wallet"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 	"github.com/btcsuite/seelog"
 )
 
@@ -78,7 +78,7 @@ func useLogger(subsystemID string, logger btclog.Logger) {
 	case "CHNS":
 		chainLog = logger
 		chain.UseLogger(logger)
-		btcrpcclient.UseLogger(logger)
+		cttrpcclient.UseLogger(logger)
 	case "GRPC":
 		grpcLog = logger
 		rpcserver.UseLogger(logger)

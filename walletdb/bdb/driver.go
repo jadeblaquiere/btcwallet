@@ -7,7 +7,7 @@ package bdb
 import (
 	"fmt"
 
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
 )
 
 const (

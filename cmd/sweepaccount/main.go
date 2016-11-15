@@ -10,22 +10,22 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jadeblaquiere/ctcd/btcjson"
-	"github.com/jadeblaquiere/ctcd/chaincfg/chainhash"
-	"github.com/jadeblaquiere/ctcd/txscript"
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcrpcclient"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/internal/cfgutil"
-	"github.com/jadeblaquiere/ctcwallet/netparams"
-	"github.com/jadeblaquiere/ctcwallet/wallet/txauthor"
-	"github.com/jadeblaquiere/ctcwallet/wallet/txrules"
+	"github.com/jadeblaquiere/cttd/btcjson"
+	"github.com/jadeblaquiere/cttd/chaincfg/chainhash"
+	"github.com/jadeblaquiere/cttd/txscript"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttrpcclient"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/internal/cfgutil"
+	"github.com/jadeblaquiere/cttwallet/netparams"
+	"github.com/jadeblaquiere/cttwallet/wallet/txauthor"
+	"github.com/jadeblaquiere/cttwallet/wallet/txrules"
 	"github.com/btcsuite/golangcrypto/ssh/terminal"
 	"github.com/jessevdk/go-flags"
 )
 
 var (
-	walletDataDirectory = btcutil.AppDataDir("btcwallet", false)
+	walletDataDirectory = cttutil.AppDataDir("cttwallet", false)
 	newlineBytes        = []byte{'\n'}
 )
 
@@ -139,12 +139,12 @@ func (noInputValue) Error() string { return "no input value" }
 // looked up again by the wallet during the call to signrawtransaction.
 func makeInputSource(outputs []btcjson.ListUnspentResult) txauthor.InputSource {
 	var (
-		totalInputValue btcutil.Amount
+		totalInputValue cttutil.Amount
 		inputs          = make([]*wire.TxIn, 0, len(outputs))
 		sourceErr       error
 	)
 	for _, output := range outputs {
-		outputAmount, err := btcutil.NewAmount(output.Amount)
+		outputAmount, err := cttutil.NewAmount(output.Amount)
 		if err != nil {
 			sourceErr = fmt.Errorf(
 				"invalid amount `%v` in listunspent result",
@@ -177,7 +177,7 @@ func makeInputSource(outputs []btcjson.ListUnspentResult) txauthor.InputSource {
 		sourceErr = noInputValue{}
 	}
 
-	return func(btcutil.Amount) (btcutil.Amount, []*wire.TxIn, [][]byte, error) {
+	return func(cttutil.Amount) (cttutil.Amount, []*wire.TxIn, [][]byte, error) {
 		return totalInputValue, inputs, nil, sourceErr
 	}
 }
@@ -185,7 +185,7 @@ func makeInputSource(outputs []btcjson.ListUnspentResult) txauthor.InputSource {
 // makeDestinationScriptSource creates a ChangeSource which is used to receive
 // all correlated previous input value.  A non-change address is created by this
 // function.
-func makeDestinationScriptSource(rpcClient *btcrpcclient.Client, accountName string) txauthor.ChangeSource {
+func makeDestinationScriptSource(rpcClient *cttrpcclient.Client, accountName string) txauthor.ChangeSource {
 	return func() ([]byte, error) {
 		destinationAddress, err := rpcClient.GetNewAddress(accountName)
 		if err != nil {
@@ -213,7 +213,7 @@ func sweep() error {
 	if err != nil {
 		return errContext(err, "failed to read RPC certificate")
 	}
-	rpcClient, err := btcrpcclient.New(&btcrpcclient.ConnConfig{
+	rpcClient, err := cttrpcclient.New(&cttrpcclient.ConnConfig{
 		Host:         opts.RPCConnect,
 		User:         opts.RPCUsername,
 		Pass:         rpcPassword,
@@ -256,7 +256,7 @@ func sweep() error {
 		}
 	}
 
-	var totalSwept btcutil.Amount
+	var totalSwept cttutil.Amount
 	var numErrors int
 	var reportError = func(format string, args ...interface{}) {
 		fmt.Fprintf(os.Stderr, format, args...)
@@ -299,7 +299,7 @@ func sweep() error {
 			continue
 		}
 
-		outputAmount := btcutil.Amount(tx.Tx.TxOut[0].Value)
+		outputAmount := cttutil.Amount(tx.Tx.TxOut[0].Value)
 		fmt.Printf("Swept %v to destination account with transaction %v\n",
 			outputAmount, txHash)
 		totalSwept += outputAmount
@@ -329,8 +329,8 @@ func promptSecret(what string) (string, error) {
 	return string(input), nil
 }
 
-func saneOutputValue(amount btcutil.Amount) bool {
-	return amount >= 0 && amount <= btcutil.MaxSatoshi
+func saneOutputValue(amount cttutil.Amount) bool {
+	return amount >= 0 && amount <= cttutil.MaxSatoshi
 }
 
 func parseOutPoint(input *btcjson.ListUnspentResult) (wire.OutPoint, error) {

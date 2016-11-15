@@ -10,15 +10,15 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/walletdb"
-	_ "github.com/jadeblaquiere/ctcwallet/walletdb/bdb"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
+	_ "github.com/jadeblaquiere/cttwallet/walletdb/bdb"
 	"github.com/jessevdk/go-flags"
 )
 
 const defaultNet = "mainnet"
 
-var datadir = btcutil.AppDataDir("btcwallet", false)
+var datadir = cttutil.AppDataDir("cttwallet", false)
 
 // Flags.
 var opts = struct {
@@ -72,7 +72,7 @@ func mainInt() int {
 	}
 
 	for !opts.Force {
-		fmt.Print("Drop all btcwallet transaction history? [y/N] ")
+		fmt.Print("Drop all cttwallet transaction history? [y/N] ")
 
 		scanner := bufio.NewScanner(bufio.NewReader(os.Stdin))
 		if !scanner.Scan() {

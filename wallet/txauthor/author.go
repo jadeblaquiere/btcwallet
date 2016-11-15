@@ -8,14 +8,14 @@ package txauthor
 import (
 	"errors"
 
-	"github.com/jadeblaquiere/ctcd/chaincfg"
-	"github.com/jadeblaquiere/ctcd/txscript"
-	"github.com/jadeblaquiere/ctcd/wire"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/wallet/txrules"
+	"github.com/jadeblaquiere/cttd/chaincfg"
+	"github.com/jadeblaquiere/cttd/txscript"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/wallet/txrules"
 
-	h "github.com/jadeblaquiere/ctcwallet/internal/helpers"
-	"github.com/jadeblaquiere/ctcwallet/wallet/internal/txsizes"
+	h "github.com/jadeblaquiere/cttwallet/internal/helpers"
+	"github.com/jadeblaquiere/cttwallet/wallet/internal/txsizes"
 )
 
 // InputSource provides transaction inputs referencing spendable outputs to
@@ -23,7 +23,7 @@ import (
 // can not be satisified, this can be signaled by returning a total amount less
 // than the target or by returning a more detailed error implementing
 // InputSourceError.
-type InputSource func(target btcutil.Amount) (total btcutil.Amount, inputs []*wire.TxIn, scripts [][]byte, err error)
+type InputSource func(target cttutil.Amount) (total cttutil.Amount, inputs []*wire.TxIn, scripts [][]byte, err error)
 
 // InputSourceError describes the failure to provide enough input value from
 // unspent transaction outputs to meet a target amount.  A typed error is used
@@ -48,7 +48,7 @@ func (insufficientFundsError) Error() string {
 type AuthoredTx struct {
 	Tx          *wire.MsgTx
 	PrevScripts [][]byte
-	TotalInput  btcutil.Amount
+	TotalInput  cttutil.Amount
 	ChangeIndex int // negative if no change
 }
 
@@ -75,7 +75,7 @@ type ChangeSource func() ([]byte, error)
 // InputSourceError is returned.
 //
 // BUGS: Fee estimation may be off when redeeming non-compressed P2PKH outputs.
-func NewUnsignedTransaction(outputs []*wire.TxOut, relayFeePerKb btcutil.Amount,
+func NewUnsignedTransaction(outputs []*wire.TxOut, relayFeePerKb cttutil.Amount,
 	fetchInputs InputSource, fetchChange ChangeSource) (*AuthoredTx, error) {
 
 	targetAmount := h.SumOutputValues(outputs)

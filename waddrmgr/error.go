@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/jadeblaquiere/ctcutil/hdkeychain"
+	"github.com/jadeblaquiere/cttutil/hdkeychain"
 )
 
 var (

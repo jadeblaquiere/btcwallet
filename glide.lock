@@ -31,7 +31,7 @@ imports:
   version: 7cc19b78d562895b13596ddce7aafb59dd789318
   subpackages:
   - proto
-- name: github.com/jadeblaquiere/ctcd
+- name: github.com/jadeblaquiere/cttd
   version: 9f662596136c14d51027e1a317c64d27a6270227
   subpackages:
   - blockchain
@@ -41,9 +41,9 @@ imports:
   - txscript
   - wire
   - database
-- name: github.com/jadeblaquiere/ctcrpcclient
+- name: github.com/jadeblaquiere/cttrpcclient
   version: e85a57e8996e53273d7b4c6741c920a5b97275ce
-- name: github.com/jadeblaquiere/ctcutil
+- name: github.com/jadeblaquiere/cttutil
   version: a04d5a6a43bf742af3a359182b9a6d4f1d09f31e
   subpackages:
   - hdkeychain

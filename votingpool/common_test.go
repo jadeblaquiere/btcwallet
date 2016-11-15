@@ -12,7 +12,7 @@ import (
 	"testing"
 
 	"github.com/btcsuite/btclog"
-	"github.com/jadeblaquiere/ctcwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
 )
 
 func init() {

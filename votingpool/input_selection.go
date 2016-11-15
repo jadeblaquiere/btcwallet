@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/jadeblaquiere/ctcd/chaincfg"
-	"github.com/jadeblaquiere/ctcd/txscript"
-	"github.com/jadeblaquiere/ctcutil"
-	"github.com/jadeblaquiere/ctcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttd/chaincfg"
+	"github.com/jadeblaquiere/cttd/txscript"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 )
 
 const eligibleInputMinConfirmations = 100
@@ -99,7 +99,7 @@ func (c byAddress) Less(i, j int) bool {
 // and the last used address of lastSeriesID. They're reverse ordered based on
 // their address.
 func (p *Pool) getEligibleInputs(store *wtxmgr.Store, startAddress WithdrawalAddress,
-	lastSeriesID uint32, dustThreshold btcutil.Amount, chainHeight int32,
+	lastSeriesID uint32, dustThreshold cttutil.Amount, chainHeight int32,
 	minConf int) ([]credit, error) {
 
 	if p.Series(lastSeriesID) == nil {
@@ -237,7 +237,7 @@ func groupCreditsByAddr(credits []wtxmgr.Credit, chainParams *chaincfg.Params) (
 // to number of confirmations, the dust threshold and that it is not
 // the charter output.
 func (p *Pool) isCreditEligible(c credit, minConf int, chainHeight int32,
-	dustThreshold btcutil.Amount) bool {
+	dustThreshold cttutil.Amount) bool {
 	if c.Amount < dustThreshold {
 		return false
 	}
