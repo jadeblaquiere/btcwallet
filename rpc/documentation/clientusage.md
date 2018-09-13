@@ -52,12 +52,12 @@ import (
 	"fmt"
 	"path/filepath"
 
-	pb "github.com/btcsuite/btcwallet/rpc/walletrpc"
+	pb "github.com/jadeblaquiere/cttwallet/rpc/walletrpc"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
-	"github.com/btcsuite/btcutil"
+	"github.com/jadeblaquiere/cttutil"
 )
 
 var certificateFile = filepath.Join(btcutil.AppDataDir("btcwallet", false), "rpc.cert")
@@ -177,7 +177,7 @@ auto main() -> int {
     if (!status.ok()) {
         std::cout << status.error_message() << std::endl;
     } else {
-        std::cout << "Spendable balance: " << response.spendable() << " Satoshis" << std::endl;
+        std::cout << "Spendable balance: " << response.spendable() << " Mystikos" << std::endl;
     }
 }
 ```
@@ -261,7 +261,7 @@ namespace Example
                     RequiredConfirmations = 1,
                 };
                 var balanceResponse = await c.BalanceAsync(balanceRequest);
-                Console.WriteLine($"Spendable balance: {balanceResponse.Spendable} Satoshis");
+                Console.WriteLine($"Spendable balance: {balanceResponse.Spendable} Mystikos");
             }
             finally
             {
@@ -377,7 +377,7 @@ client.balance(request, function(err, response) {
     if (err) {
         console.error(err);
     } else {
-        console.log('Spendable balance:', response.spendable, 'Satoshis');
+        console.log('Spendable balance:', response.spendable, 'Mystikos');
     }
 });
 ```
@@ -431,7 +431,7 @@ def main():
 
     request = walletrpc.BalanceRequest(account_number = 0, required_confirmations = 1)
     response = stub.Balance(request, timeout)
-    print 'Spendable balance: %d Satoshis' % response.spendable
+    print 'Spendable balance: %d Mystikos' % response.spendable
 
 if __name__ == '__main__':
     main()

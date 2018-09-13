@@ -15,13 +15,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcwallet/internal/cfgutil"
-	"github.com/btcsuite/btcwallet/internal/legacy/keystore"
-	"github.com/btcsuite/btcwallet/netparams"
-	"github.com/btcsuite/btcwallet/wallet"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/internal/cfgutil"
+	"github.com/jadeblaquiere/cttwallet/internal/legacy/keystore"
+	"github.com/jadeblaquiere/cttwallet/netparams"
+	"github.com/jadeblaquiere/cttwallet/wallet"
 	flags "github.com/jessevdk/go-flags"
-	"github.com/lightninglabs/neutrino"
+	"github.com/jadeblaquiere/neutrino"
 )
 
 const (

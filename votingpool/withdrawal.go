@@ -14,19 +14,19 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcwallet/waddrmgr"
-	"github.com/btcsuite/btcwallet/walletdb"
-	"github.com/btcsuite/btcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttd/txscript"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/waddrmgr"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 )
 
 // Maximum tx size (in bytes). This should be the same as bitcoind's
 // MAX_STANDARD_TX_SIZE.
 const txMaxSize = 100000
 
-// feeIncrement is the minimum transation fee (0.00001 BTC, measured in satoshis)
+// feeIncrement is the minimum transation fee (0.00001 CTT, measured in satoshis)
 // added to transactions requiring a fee.
 const feeIncrement = 1e3
 

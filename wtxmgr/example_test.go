@@ -7,20 +7,20 @@ package wtxmgr_test
 import (
 	"fmt"
 
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcwallet/walletdb"
-	"github.com/btcsuite/btcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttd/chaincfg"
+	"github.com/jadeblaquiere/cttd/chaincfg/chainhash"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 )
 
 var (
 	// Spends: bogus
-	// Outputs: 10 BTC
+	// Outputs: 10 CTT
 	exampleTxRecordA *wtxmgr.TxRecord
 
 	// Spends: A:0
-	// Outputs: 5 BTC, 5 BTC
+	// Outputs: 5 CTT, 5 CTT
 	exampleTxRecordB *wtxmgr.TxRecord
 )
 
@@ -80,7 +80,7 @@ func ExampleStore_Balance() {
 		fmt.Printf("%v, %v, %v\n", zeroConfBal, oneConfBal, sixConfBal)
 	}
 
-	// Insert a transaction which outputs 10 BTC unmined and mark the output
+	// Insert a transaction which outputs 10 CTT unmined and mark the output
 	// as a credit.
 	err = walletdb.Update(db, func(tx walletdb.ReadWriteTx) error {
 		ns := tx.ReadWriteBucket(namespaceKey)
@@ -110,9 +110,9 @@ func ExampleStore_Balance() {
 	printBalances(105)
 
 	// Output:
-	// 10 BTC, 0 BTC, 0 BTC
-	// 10 BTC, 10 BTC, 0 BTC
-	// 10 BTC, 10 BTC, 10 BTC
+	// 10 CTT, 0 CTT, 0 CTT
+	// 10 CTT, 10 CTT, 0 CTT
+	// 10 CTT, 10 CTT, 10 CTT
 }
 
 func ExampleStore_Rollback() {
@@ -126,7 +126,7 @@ func ExampleStore_Rollback() {
 	err = walletdb.Update(db, func(tx walletdb.ReadWriteTx) error {
 		ns := tx.ReadWriteBucket(namespaceKey)
 
-		// Insert a transaction which outputs 10 BTC in a block at height 100.
+		// Insert a transaction which outputs 10 CTT in a block at height 100.
 		err := s.InsertTx(ns, exampleTxRecordA, &exampleBlock100)
 		if err != nil {
 			return err
@@ -194,7 +194,7 @@ func Example_basicUsage() {
 		return
 	}
 
-	// Insert an unmined transaction that outputs 10 BTC to a wallet address
+	// Insert an unmined transaction that outputs 10 CTT to a wallet address
 	// at output 0.
 	err = s.InsertTx(b, exampleTxRecordA, nil)
 	if err != nil {
@@ -208,7 +208,7 @@ func Example_basicUsage() {
 	}
 
 	// Insert a second transaction which spends the output, and creates two
-	// outputs.  Mark the second one (5 BTC) as wallet change.
+	// outputs.  Mark the second one (5 CTT) as wallet change.
 	err = s.InsertTx(b, exampleTxRecordB, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -251,6 +251,6 @@ func Example_basicUsage() {
 	}
 
 	// Output:
-	// 5 BTC
+	// 5 CTT
 	// true
 }

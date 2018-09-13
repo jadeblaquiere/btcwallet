@@ -352,7 +352,7 @@ the wallet.
   - `string account_name`: The name of the account.
   
   - `int64 total_balance`: The total (zero-conf and immature) balance, counted
-    in Satoshis.
+    in Mystikos.
   
   - `uint32 external_key_count`: The number of derived keys in the external
      key chain.
@@ -393,15 +393,15 @@ and unspendable immature coinbase balances.
 **Response:** `BalanceResponse`
 
 - `int64 total`: The total (zero-conf and immature) balance, counted in
-  Satoshis.
+  Mystikos.
 
 - `int64 spendable`: The spendable balance, given some number of required
-  confirmations, counted in Satoshis.  This equals the total balance when the
+  confirmations, counted in Mystikos.  This equals the total balance when the
   required number of confirmations is zero and there are no immature coinbase
   outputs.
 
 - `int64 immature_reward`: The total value of all immature coinbase outputs,
-  counted in Satoshis.
+  counted in Mystikos.
 
 **Expected errors:**
 
@@ -669,7 +669,7 @@ transaction paying to already known addresses or scripts.
   set to query.
 
 - `int64 target_amount`: If positive, the service may limit output results to
-  those that sum to at least this amount (counted in Satoshis).  If zero, all
+  those that sum to at least this amount (counted in Mystikos).  If zero, all
   outputs not excluded by other arguments are returned.  This may not be
   negative.
 
@@ -696,7 +696,7 @@ transaction paying to already known addresses or scripts.
   - `uint32 output_index`: The output index of the transaction this output
     originates from.
 
-  - `int64 amount`: The output value (counted in Satoshis) of the unspent
+  - `int64 amount`: The output value (counted in Mystikos) of the unspent
     transaction output.
 
   - `bytes pk_script`: The output script of the unspent transaction output.

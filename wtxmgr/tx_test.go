@@ -13,14 +13,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcwallet/walletdb"
-	_ "github.com/btcsuite/btcwallet/walletdb/bdb"
-	"github.com/btcsuite/btcwallet/wtxmgr"
-	. "github.com/btcsuite/btcwallet/wtxmgr"
+	"github.com/jadeblaquiere/cttd/chaincfg"
+	"github.com/jadeblaquiere/cttd/chaincfg/chainhash"
+	"github.com/jadeblaquiere/cttd/wire"
+	"github.com/jadeblaquiere/cttutil"
+	"github.com/jadeblaquiere/cttwallet/walletdb"
+	_ "github.com/jadeblaquiere/cttwallet/walletdb/bdb"
+	"github.com/jadeblaquiere/cttwallet/wtxmgr"
+	. "github.com/jadeblaquiere/cttwallet/wtxmgr"
 )
 
 // Received transaction output for mainnet outpoint
@@ -107,7 +107,7 @@ func TestInsertsCreditsDebitsRollbacks(t *testing.T) {
 
 	// Create a double spend of the received blockchain transaction.
 	dupRecvTx, _ := btcutil.NewTxFromBytes(TstRecvSerializedTx)
-	// Switch txout amount to 1 BTC.  Transaction store doesn't
+	// Switch txout amount to 1 CTT.  Transaction store doesn't
 	// validate txs, so this is fine for testing a double spend
 	// removal.
 	TstDupRecvAmount := int64(1e8)
@@ -708,7 +708,7 @@ func TestCoinbases(t *testing.T) {
 
 	coinbaseMaturity := int32(chaincfg.TestNet3Params.CoinbaseMaturity)
 
-	// Balance should be 0 if the coinbase is immature, 50 BTC at and beyond
+	// Balance should be 0 if the coinbase is immature, 50 CTT at and beyond
 	// maturity.
 	//
 	// Outputs when depth is below maturity are never included, no matter
