@@ -18,7 +18,7 @@ import (
 	"github.com/jadeblaquiere/cttwallet/wallet"
 	"github.com/jadeblaquiere/cttwallet/wtxmgr"
 	"github.com/jrick/logrotate/rotator"
-	"github.com/jadeblaquiere/neutrino"
+	"github.com/jadeblaquiere/ctneutrino"
 )
 
 // logWriter implements an io.Writer that outputs to both standard output and

@@ -16,7 +16,7 @@ import (
 	"github.com/jadeblaquiere/cttutil/gcs/builder"
 	"github.com/jadeblaquiere/cttwallet/waddrmgr"
 	"github.com/jadeblaquiere/cttwallet/wtxmgr"
-	"github.com/jadeblaquiere/neutrino"
+	"github.com/jadeblaquiere/ctneutrino"
 )
 
 // NeutrinoClient is an implementation of the btcwalet chain.Interface interface.

@@ -21,7 +21,7 @@ import (
 	"github.com/jadeblaquiere/cttwallet/netparams"
 	"github.com/jadeblaquiere/cttwallet/wallet"
 	flags "github.com/jessevdk/go-flags"
-	"github.com/jadeblaquiere/neutrino"
+	"github.com/jadeblaquiere/ctneutrino"
 )
 
 const (

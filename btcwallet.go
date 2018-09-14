@@ -18,7 +18,7 @@ import (
 	"github.com/jadeblaquiere/cttwallet/rpc/legacyrpc"
 	"github.com/jadeblaquiere/cttwallet/wallet"
 	"github.com/jadeblaquiere/cttwallet/walletdb"
-	"github.com/jadeblaquiere/neutrino"
+	"github.com/jadeblaquiere/ctneutrino"
 )
 
 var (
