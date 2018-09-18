@@ -37,3 +37,11 @@ var SimNetParams = Params{
 	RPCClientPort: "18556",
 	RPCServerPort: "18554",
 }
+
+// SimNetParams contains parameters specific to the simulation test network
+// (wire.SimNet).
+var CtBlueNetParams = Params{
+	Params:        &chaincfg.CtBlueNetParams,
+	RPCClientPort: "17762",
+	RPCServerPort: "17763",
+}

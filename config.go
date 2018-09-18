@@ -54,6 +54,7 @@ type config struct {
 	AppDataDir    *cfgutil.ExplicitString `short:"A" long:"appdata" description:"Application data directory for wallet config, databases and logs"`
 	TestNet3      bool                    `long:"testnet" description:"Use the test Bitcoin network (version 3) (default mainnet)"`
 	SimNet        bool                    `long:"simnet" description:"Use the simulation test network (default mainnet)"`
+	CtBlueNet     bool                    `long:"bluenet" description:"Use the ciphrtxt blue test network (default mainnet)"`
 	NoInitialLoad bool                    `long:"noinitialload" description:"Defer wallet creation/opening on startup and enable loading wallets over RPC"`
 	DebugLevel    string                  `short:"d" long:"debuglevel" description:"Logging level {trace, debug, info, warn, error, critical}"`
 	LogDir        string                  `long:"logdir" description:"Directory to log output."`
@@ -363,6 +364,10 @@ func loadConfig() (*config, []string, error) {
 	}
 	if cfg.SimNet {
 		activeNet = &netparams.SimNetParams
+		numNets++
+	}
+	if cfg.CtBlueNet {
+		activeNet = &netparams.CtBlueNetParams
 		numNets++
 	}
 	if numNets > 1 {
