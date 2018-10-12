@@ -37,7 +37,7 @@ const (
 )
 
 var (
-	btcdDefaultCAFile  = filepath.Join(btcutil.AppDataDir("btcd", false), "rpc.cert")
+	btcdDefaultCAFile  = filepath.Join(btcutil.AppDataDir("cttd", false), "rpc.cert")
 	defaultAppDataDir  = btcutil.AppDataDir("btcwallet", false)
 	defaultConfigFile  = filepath.Join(defaultAppDataDir, defaultConfigFilename)
 	defaultRPCKeyFile  = filepath.Join(defaultAppDataDir, "rpc.key")
